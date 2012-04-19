@@ -42,6 +42,7 @@ module Fog
 
         @address  = address
         @username = username
+        @debug = options.delete :debug
         @options  = { :paranoid => false }.merge(options)
       end
 
@@ -60,11 +61,13 @@ module Fog
                   end
 
                   channel.on_data do |ch, data|
+                    puts data if @debug
                     result.stdout << data
                   end
 
                   channel.on_extended_data do |ch, type, data|
                     next unless type == 1
+                    puts data if @debug
                     result.stderr << data
                   end
 
